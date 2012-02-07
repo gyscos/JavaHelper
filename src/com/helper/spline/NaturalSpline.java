@@ -100,10 +100,7 @@ public class NaturalSpline extends Spline {
 
         double a = (coefs[i + 1] - coefs[i]) / (6.0 * h);
         double b = coefs[i] / 2.0;
-        double c = -(h / 6.0) * (coefs[i + 1] + 2.0 * coefs[i]) + (values[i + 1] - values[i]) / h;
         double x = time - times[i];
-
-        // So derivative is 3.a.x^2 + 2.b.x + c
 
         return 2 * b + 6 * a * x;
     }
