@@ -10,6 +10,14 @@ public class Product extends Value {
     }
 
     @Override
+    public Value compute(Memory memory) {
+        Value[] nv = new Value[values.length];
+        for (int i = 0; i < values.length; i++)
+            nv[i] = values[i].compute(memory);
+        return new Product(nv);
+    }
+
+    @Override
     public double getDouble(Memory memory) {
         double result = 1;
         for (Value value : values)

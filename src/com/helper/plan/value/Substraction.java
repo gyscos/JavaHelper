@@ -12,6 +12,11 @@ public class Substraction extends Value {
     }
 
     @Override
+    public Value compute(Memory memory) {
+        return new Substraction(A.compute(memory), B.compute(memory));
+    }
+
+    @Override
     public double getDouble(Memory memory) {
         return A.getDouble(memory) - B.getDouble(memory);
     }
