@@ -22,7 +22,7 @@ public abstract class Spline {
     }
 
     /**
-     * Pre-compute some coefs for advanced type of splines (cubic, natural, ...)
+     * Pre-compute some coefficents for advanced type of splines (cubic, natural, ...)
      */
     public void computeCoeffs() {
     }
@@ -58,7 +58,7 @@ public abstract class Spline {
     }
 
     /**
-     * Returns the interpolation by the splie at the given time.
+     * Returns the interpolation by the spline at the given time.
      * 
      * @param time
      * @return
