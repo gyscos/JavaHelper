@@ -2,24 +2,24 @@ package com.helper.spline;
 
 import com.helper.geometry.PointD;
 
-public class Spline2D<T extends Spline> {
-    T        splineX;
-    T         splineY;
+public class Spline2D {
+    Spline         splineX;
+    Spline         splineY;
 
     private PointD workPoint = new PointD();
 
-    public Spline2D(final T splineX, final T splineY) {
+    public Spline2D(final Spline splineX, final Spline splineY) {
         this.splineX = splineX;
         this.splineY = splineY;
     }
 
-    public Spline2D<T> addPoint(final double time, final double x, final double y) {
+    public Spline2D addPoint(final double time, final double x, final double y) {
         splineX.addValue(time, x);
         splineY.addValue(time, y);
         return this;
     }
 
-    public Spline2D<T> addPoint(final double time, final PointD value) {
+    public Spline2D addPoint(final double time, final PointD value) {
         return addPoint(time, value.x, value.y);
     }
 
