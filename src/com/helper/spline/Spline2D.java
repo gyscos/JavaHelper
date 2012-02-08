@@ -13,6 +13,10 @@ public class Spline2D {
         this.splineY = splineY;
     }
 
+    public Spline2D(SplineType typeX, SplineType typeY, int n) {
+        this(typeX.createSpline(n), typeY.createSpline(n));
+    }
+
     public Spline2D addPoint(final double time, final double x, final double y) {
         splineX.addValue(time, x);
         splineY.addValue(time, y);
