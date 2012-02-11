@@ -20,9 +20,14 @@ public abstract class NetworkServer {
      * @author gyscos
      * 
      */
-    public abstract class NetworkHandler extends NetworkAgent {
+    public abstract class NetworkHandler<T extends Enum<T> & NetworkCommand> extends
+            NetworkAgent<T> {
 
         Thread t;
+
+        public NetworkHandler(Class<T> c) {
+            super(c);
+        }
 
         @Override
         public synchronized void close() {
@@ -46,18 +51,18 @@ public abstract class NetworkServer {
         }
     }
 
-    Thread                            thread;
-    ServerSocket                      socket;
-    boolean                           running = false;
+    Thread                               thread;
+    ServerSocket                         socket;
+    boolean                              running = false;
 
-    public LinkedList<NetworkHandler> handlers;
+    public LinkedList<NetworkHandler<?>> handlers;
 
     public void close() {
         try {
             running = false;
             socket.close();
             synchronized (handlers) {
-                for (NetworkHandler handler : handlers)
+                for (NetworkHandler<?> handler : handlers)
                     handler.close();
             }
         } catch (IOException e) {
@@ -65,7 +70,7 @@ public abstract class NetworkServer {
         }
     }
 
-    public abstract NetworkHandler getHandler();
+    public abstract NetworkHandler<?> getHandler();
 
     /**
      * Tells the server to listen on the given port.
@@ -84,7 +89,7 @@ public abstract class NetworkServer {
         thread.start();
     }
 
-    public void onHandlerDone(NetworkHandler handler) {
+    public void onHandlerDone(NetworkHandler<?> handler) {
         synchronized (handlers) {
             handlers.remove(handler);
         }
@@ -94,7 +99,7 @@ public abstract class NetworkServer {
         try {
             while (running) {
                 final Socket client = socket.accept();
-                NetworkHandler handler = getHandler();
+                NetworkHandler<?> handler = getHandler();
                 handler.start(client);
                 synchronized (handlers) {
                     handlers.addLast(handler);

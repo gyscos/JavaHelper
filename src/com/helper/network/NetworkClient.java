@@ -8,9 +8,13 @@ import java.net.Socket;
  * @author gyscos
  * 
  */
-public abstract class NetworkClient extends NetworkAgent {
+public abstract class NetworkClient<T extends Enum<T> & NetworkCommand> extends NetworkAgent<T> {
 
     Thread thread;
+
+    public NetworkClient(Class<T> c) {
+        super(c);
+    }
 
     public void connect(final String server, final int port) {
         running = true;

@@ -5,13 +5,31 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
 
-public abstract class NetworkAgent {
-    Socket         socket;
-    PrintWriter    out;
-    BufferedReader in;
+import com.helper.StringHelper;
 
-    boolean        running = false;
+public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
+    public final static String mainDelim = "::";
+
+    public final static String secDelim  = ";";
+    Socket                     socket;
+    PrintWriter                out;
+    BufferedReader             in;
+
+    boolean                    running   = false;
+
+    HashMap<String, T>         commands  = new HashMap<String, T>();
+
+    public NetworkAgent(Class<T> c) {
+        for (T t : c.getEnumConstants()) {
+            addCommand(t.getName(), t);
+        }
+    }
+
+    public void addCommand(String command, T cmdId) {
+        commands.put(command, cmdId);
+    }
 
     public synchronized void close() {
         try {
@@ -25,7 +43,7 @@ public abstract class NetworkAgent {
         }
     }
 
-    public abstract void handleCommand(String command, String[] data);
+    public abstract void handleCommand(T command, String[] data);
 
     public boolean handleUrgent(String command, String[] data) {
         if (command.equals("QUIT")) {
@@ -45,7 +63,7 @@ public abstract class NetworkAgent {
             onConnect();
 
             while (running) {
-                String[] line = in.readLine().split("::");
+                String[] line = in.readLine().split(mainDelim);
                 if (line.length == 0)
                     // ??
                     continue;
@@ -53,18 +71,22 @@ public abstract class NetworkAgent {
                 String command = line[0];
                 String[] data = null;
                 if (line.length > 1)
-                    data = line[1].split(";");
+                    data = line[1].split(secDelim);
 
                 if (!handleUrgent(command, data))
-                    handleCommand(command, data);
+                    handleCommand(commands.get(command), data);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public synchronized void send(String command, Object[] data) {
-        out.println(command);
+    public synchronized void send(String msg) {
+        out.println(msg);
+    }
+
+    public synchronized void send(String command, Object... data) {
+        send(command + mainDelim + StringHelper.merge(data, secDelim));
     }
 
     public synchronized void setup(Socket socket) {
