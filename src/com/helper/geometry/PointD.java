@@ -26,7 +26,7 @@ public class PointD {
      * Basic contructor.
      */
     public PointD() {
-        set(0, 0);
+        setCoord(0, 0);
     }
 
     /**
@@ -59,6 +59,10 @@ public class PointD {
      */
     public PointD(final PointI p) {
         set(p);
+    }
+
+    public PointD(String string) {
+        set(string);
     }
 
     /**
@@ -305,24 +309,26 @@ public class PointD {
         return this;
     }
 
-    public void set(final int dim, final double value) {
+    public PointD set(final PointD p) {
+        return set(p.x, p.y);
+    }
+
+    public PointD set(final PointI p) {
+        return set(p.x, p.y);
+    }
+
+    public PointD set(String string) {
+        // First and last char are [,]
+        String[] values = string.substring(1, string.length() - 2).split(":");
+        return set(Double.parseDouble(values[0]), Double.parseDouble(values[1]));
+    }
+
+    public PointD setCoord(final int dim, final double value) {
         if (dim == 0) {
             x = value;
         } else {
             y = value;
         }
-
-    }
-
-    public PointD set(final PointD p) {
-        x = p.x;
-        y = p.y;
-        return this;
-    }
-
-    public PointD set(final PointI p) {
-        x = p.x;
-        y = p.y;
         return this;
     }
 
