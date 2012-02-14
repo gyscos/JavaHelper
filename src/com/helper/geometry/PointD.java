@@ -1,11 +1,13 @@
 package com.helper.geometry;
 
-import java.awt.Point;
-
 import com.helper.MathHelper;
 
 @SuppressWarnings("unused")
 public class PointD {
+    public static final PointD  X   = new PointD(1, 0);
+    public static final PointD  Y   = new PointD(0, 1);
+    public static final PointD  O   = new PointD(0, 0);
+
     private final static String tag = "PointD";
 
     public static PointD create(final Object obj) {
@@ -13,7 +15,7 @@ public class PointD {
             return (PointD) obj;
         }
 
-        return new PointD(0, 0);
+        return O;
     }
 
     public double x;
@@ -310,12 +312,6 @@ public class PointD {
             y = value;
         }
 
-    }
-
-    public PointD set(final Point p) {
-        x = p.x;
-        y = p.y;
-        return this;
     }
 
     public PointD set(final PointD p) {

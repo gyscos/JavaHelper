@@ -1,7 +1,8 @@
 package com.helper;
 
 public class StringHelper {
-    public static String merge(Object[] list, String del) {
+
+    public static String merge(String del, Object[] list) {
         if (list.length == 0)
             return "";
 

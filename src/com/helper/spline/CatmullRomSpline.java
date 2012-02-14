@@ -1,6 +1,36 @@
 package com.helper.spline;
 
+import com.helper.geometry.PointD;
+
 public class CatmullRomSpline extends Spline {
+
+    public static CatmullRomSpline regularInterpolate(double dt, double... values) {
+        if (values.length < 2)
+            return null;
+
+        CatmullRomSpline result = new CatmullRomSpline(values.length + 2);
+
+        result.addValue(-dt, values[1]);
+        for (int i = 0; i < values.length; i++)
+            result.addValue(dt * i, values[i]);
+        result.addValue(-dt, values[values.length - 2]);
+
+        return result;
+    }
+
+    public static Spline2D regularInterpolate(double dt, PointD... values) {
+        if (values.length < 2)
+            return null;
+
+        Spline2D result = new Spline2D(SplineType.CATMULLROM, SplineType.CATMULLROM, values.length + 2);
+
+        result.addPoint(-dt, values[1]);
+        for (int i = 0; i < values.length; i++)
+            result.addPoint(dt * i, values[i]);
+        result.addPoint(-dt, values[values.length - 2]);
+
+        return result;
+    }
 
     double[][] coefs;
 

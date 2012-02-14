@@ -86,7 +86,7 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
     }
 
     public synchronized void send(String command, Object... data) {
-        send(command + mainDelim + StringHelper.merge(data, secDelim));
+        send(command + mainDelim + StringHelper.merge(secDelim, data));
     }
 
     public synchronized void setup(Socket socket) {
