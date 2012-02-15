@@ -31,6 +31,21 @@ public abstract class BroadcastFinder {
 
     public abstract void onFind(InetAddress addr, String name);
 
+    public void refind() {
+        new Thread() {
+            @Override
+            public void run() {
+                InetAddress addr;
+                try {
+                    addr = InetAddress.getByName(broadcastIp);
+                    ask(addr);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
     public void run() throws IOException {
         while (running) {
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
