@@ -63,15 +63,21 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
             onConnect();
 
             while (running) {
-                String[] line = in.readLine().split(mainDelim);
-                if (line.length == 0)
+                String line = in.readLine();
+                if (line == null) {
+                    running = false;
+                    break;
+                }
+
+                String[] list = line.split(mainDelim);
+                if (list.length == 0)
                     // ??
                     continue;
 
-                String command = line[0];
+                String command = list[0];
                 String[] data = null;
-                if (line.length > 1)
-                    data = line[1].split(secDelim);
+                if (list.length > 1)
+                    data = list[1].split(secDelim);
 
                 if (!handleUrgent(command, data))
                     handleCommand(commands.get(command), data);

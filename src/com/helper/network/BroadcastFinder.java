@@ -84,6 +84,9 @@ public abstract class BroadcastFinder {
 
     public void stop() {
         try {
+            if (!running)
+                return;
+
             running = false;
             socket.close();
             thread.join();
