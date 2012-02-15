@@ -68,4 +68,14 @@ public abstract class BroadcastFinder {
         thread.start();
         return this;
     }
+
+    public void stop() {
+        try {
+            running = false;
+            socket.close();
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

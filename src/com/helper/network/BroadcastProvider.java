@@ -65,6 +65,16 @@ public class BroadcastProvider {
         return this;
     }
 
+    public void stop() {
+        try {
+            running = false;
+            socket.close();
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void tell(InetAddress addr) throws IOException {
         // Send a broadcast
         byte[] byteName = name.getBytes();
