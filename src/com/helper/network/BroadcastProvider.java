@@ -16,12 +16,6 @@ public class BroadcastProvider {
 
     byte[]         buffer  = new byte[64];
 
-    public BroadcastProvider(String name, String broadcastIp, int port) {
-        this.name = name;
-        this.port = port;
-        this.broadcastIp = broadcastIp;
-    }
-
     public void end() {
         socket.close();
     }
@@ -45,7 +39,11 @@ public class BroadcastProvider {
         tell(addr);
     }
 
-    public BroadcastProvider start() {
+    public BroadcastProvider start(String name, String broadcastIp, int port) {
+        this.name = name;
+        this.port = port;
+        this.broadcastIp = broadcastIp;
+
         running = true;
         thread = new Thread() {
             @Override

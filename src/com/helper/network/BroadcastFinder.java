@@ -15,11 +15,6 @@ public abstract class BroadcastFinder {
 
     byte[]         buffer  = new byte[64];
 
-    public BroadcastFinder(String broadcastIp, int port) {
-        this.broadcastIp = broadcastIp;
-        this.port = port;
-    }
-
     public void ask(InetAddress addr) throws IOException {
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, addr, port);
         socket.send(packet);
@@ -64,7 +59,10 @@ public abstract class BroadcastFinder {
         ask(addr);
     }
 
-    public BroadcastFinder start() {
+    public BroadcastFinder start(String broadcastIp, int port) {
+        this.broadcastIp = broadcastIp;
+        this.port = port;
+
         running = true;
         thread = new Thread() {
             @Override
