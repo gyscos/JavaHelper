@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 
 import com.helper.StringHelper;
@@ -58,6 +59,9 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
      */
     public abstract void onConnect();
 
+    public void onDisconnect() {
+    }
+
     public void run() {
         try {
             onConnect();
@@ -83,9 +87,14 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
                 if (!handleUrgent(command, data))
                     handleCommand(commands.get(command), data);
             }
+            // System.out.println("Clean disconnection.");
+            close();
+        } catch (SocketException e) {
+            // System.out.println("Socket Exception !");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        onDisconnect();
     }
 
     private synchronized void send(String msg) {
