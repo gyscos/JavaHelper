@@ -10,13 +10,16 @@ public abstract class BroadcastFinder {
     DatagramSocket socket;
     boolean        running = false;
     Thread         thread;
-    int            port;
+
+    int            providerPort;
+    int            finderPort;
+
     String         broadcastIp;
 
     byte[]         buffer  = new byte[64];
 
     public void ask(InetAddress addr) throws IOException {
-        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, addr, port);
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, addr, providerPort);
         socket.send(packet);
     }
 
@@ -41,7 +44,7 @@ public abstract class BroadcastFinder {
         }.start();
     }
 
-    public void run() throws IOException {
+    private void run() throws IOException {
         while (running) {
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
             socket.receive(packet);
@@ -52,16 +55,18 @@ public abstract class BroadcastFinder {
         }
     }
 
-    public void setup() throws IOException {
-        socket = new DatagramSocket(port);
+    private void setup() throws IOException {
+        System.out.println("Listening on port " + finderPort);
+        socket = new DatagramSocket(finderPort);
 
         InetAddress addr = InetAddress.getByName(broadcastIp);
         ask(addr);
     }
 
-    public BroadcastFinder start(String broadcastIp, int port) {
+    public BroadcastFinder start(String broadcastIp, int providerPort, int finderPort) {
         this.broadcastIp = broadcastIp;
-        this.port = port;
+        this.providerPort = providerPort;
+        this.finderPort = finderPort;
 
         running = true;
         thread = new Thread() {
@@ -69,10 +74,10 @@ public abstract class BroadcastFinder {
             public void run() {
                 try {
                     setup();
-                    run();
+                    BroadcastFinder.this.run();
                     end();
                 } catch (SocketException e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

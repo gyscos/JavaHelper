@@ -11,7 +11,10 @@ public class BroadcastProvider {
     boolean        running = false;
     Thread         thread;
     String         name;
-    int            port;
+
+    int            finderPort;
+    int            providerPort;
+
     String         broadcastIp;
 
     byte[]         buffer  = new byte[64];
@@ -33,15 +36,16 @@ public class BroadcastProvider {
     }
 
     public void setup() throws IOException {
-        socket = new DatagramSocket(port);
+        socket = new DatagramSocket(providerPort);
 
         InetAddress addr = InetAddress.getByName(broadcastIp);
         tell(addr);
     }
 
-    public BroadcastProvider start(String name, String broadcastIp, int port) {
+    public BroadcastProvider start(String name, String broadcastIp, int providerPort, int finderPort) {
         this.name = name;
-        this.port = port;
+        this.providerPort = providerPort;
+        this.finderPort = finderPort;
         this.broadcastIp = broadcastIp;
 
         running = true;
@@ -76,7 +80,7 @@ public class BroadcastProvider {
     private void tell(InetAddress addr) throws IOException {
         // Send a broadcast
         byte[] byteName = name.getBytes();
-        DatagramPacket packet = new DatagramPacket(byteName, byteName.length, addr, port);
+        DatagramPacket packet = new DatagramPacket(byteName, byteName.length, addr, finderPort);
         socket.send(packet);
     }
 }
