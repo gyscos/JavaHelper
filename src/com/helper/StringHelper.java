@@ -3,7 +3,8 @@ package com.helper;
 public class StringHelper {
 
     public static String broadcastize(String ip) {
-        String[] list = ip.split(".");
+        String[] list = ip.split("\\.");
+
         if (list.length != 4)
             return ip;
 

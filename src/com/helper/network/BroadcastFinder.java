@@ -56,7 +56,7 @@ public abstract class BroadcastFinder {
     }
 
     private void setup() throws IOException {
-        System.out.println("Listening on port " + finderPort);
+        // System.out.println("Listening on port " + finderPort);
         socket = new DatagramSocket(finderPort);
 
         InetAddress addr = InetAddress.getByName(broadcastIp);
@@ -64,6 +64,7 @@ public abstract class BroadcastFinder {
     }
 
     public BroadcastFinder start(String broadcastIp, int providerPort, int finderPort) {
+        // System.out.println("Broadcasting on " + broadcastIp);
         this.broadcastIp = broadcastIp;
         this.providerPort = providerPort;
         this.finderPort = finderPort;
