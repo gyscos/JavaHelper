@@ -20,20 +20,6 @@ public class PointI {
         set(p);
     }
 
-    /**
-     * Adds the specified point to this one.
-     * 
-     * @param p
-     *            Point to add
-     */
-    public void add(final PointI p) {
-        if (p == null)
-            return;
-
-        x += p.x;
-        y += p.y;
-    }
-
     @Override
     public PointI clone() {
         return new PointI(this);
@@ -45,9 +31,40 @@ public class PointI {
      * @param p
      *            Point to store the new data
      */
-    public void clone(final PointI p) {
+    public PointI clone(final PointI p) {
         p.x = x;
         p.y = y;
+        return this;
+    }
+
+    /**
+     * Adds the specified point to this one.
+     * 
+     * @param p
+     *            Point to add
+     */
+    public PointI doAdd(final PointI p) {
+        if (p == null)
+            return this;
+
+        x += p.x;
+        y += p.y;
+
+        return this;
+    }
+
+    public PointI doMinus(PointI p) {
+        if (p == null)
+            return this;
+
+        x -= p.x;
+        y -= p.y;
+
+        return this;
+    }
+
+    public PointD getNormalize(double length) {
+        return new PointD(this).normalize(length);
     }
 
     public double length() {
