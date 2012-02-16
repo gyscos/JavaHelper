@@ -31,7 +31,9 @@ public abstract class NetworkClient<T extends Enum<T> & NetworkCommand> extends 
 
     public void setup(String server, int port) {
         try {
+            System.out.println("Connecting to " + server + " on port " + port);
             socket = new Socket(server, port);
+            // socket.getOutputStream().write("Test, test !\n".getBytes());
 
             super.setup(socket);
         } catch (IOException e) {

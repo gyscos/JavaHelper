@@ -15,7 +15,7 @@ public class BroadcastProvider {
     int            finderPort;
     int            providerPort;
 
-    String         broadcastIp;
+    InetAddress    broadcastAddr;
 
     byte[]         buffer  = new byte[64];
 
@@ -38,15 +38,15 @@ public class BroadcastProvider {
     public void setup() throws IOException {
         socket = new DatagramSocket(providerPort);
 
-        InetAddress addr = InetAddress.getByName(broadcastIp);
-        tell(addr);
+        tell(broadcastAddr);
     }
 
-    public BroadcastProvider start(String name, String broadcastIp, int providerPort, int finderPort) {
+    public BroadcastProvider start(String name, InetAddress broadcastAddr, int providerPort, int finderPort) {
+        System.out.println("Start providing");
         this.name = name;
         this.providerPort = providerPort;
         this.finderPort = finderPort;
-        this.broadcastIp = broadcastIp;
+        this.broadcastAddr = broadcastAddr;
 
         running = true;
         thread = new Thread() {
@@ -54,7 +54,7 @@ public class BroadcastProvider {
             public void run() {
                 try {
                     setup();
-                    run();
+                    BroadcastProvider.this.run();
                     end();
                 } catch (SocketException e) {
                     e.printStackTrace();

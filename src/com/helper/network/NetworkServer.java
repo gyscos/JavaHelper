@@ -53,9 +53,9 @@ public abstract class NetworkServer {
 
     Thread                               thread;
     ServerSocket                         socket;
-    boolean                              running = false;
+    boolean                              running  = false;
 
-    public LinkedList<NetworkHandler<?>> handlers;
+    public LinkedList<NetworkHandler<?>> handlers = new LinkedList<NetworkHandler<?>>();
 
     public void close() {
         try {

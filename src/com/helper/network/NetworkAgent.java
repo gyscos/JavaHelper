@@ -64,6 +64,7 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
 
             while (running) {
                 String line = in.readLine();
+                // System.out.println("Received : " + line);
                 if (line == null) {
                     running = false;
                     break;
@@ -101,13 +102,12 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
 
     public synchronized void setup(Socket socket) {
         try {
-
             this.socket = socket;
-            out = new PrintWriter(socket.getOutputStream());
+            out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+        running = true;
     }
 }
