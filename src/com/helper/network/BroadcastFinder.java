@@ -14,7 +14,7 @@ public abstract class BroadcastFinder {
     int            providerPort;
     int            finderPort;
 
-    String         broadcastIp;
+    InetAddress    broadcastAddr;
 
     byte[]         buffer  = new byte[64];
 
@@ -35,8 +35,7 @@ public abstract class BroadcastFinder {
             public void run() {
                 InetAddress addr;
                 try {
-                    addr = InetAddress.getByName(broadcastIp);
-                    ask(addr);
+                    ask(broadcastAddr);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -59,13 +58,12 @@ public abstract class BroadcastFinder {
         // System.out.println("Listening on port " + finderPort);
         socket = new DatagramSocket(finderPort);
 
-        InetAddress addr = InetAddress.getByName(broadcastIp);
-        ask(addr);
+        ask(broadcastAddr);
     }
 
-    public BroadcastFinder start(String broadcastIp, int providerPort, int finderPort) {
-        // System.out.println("Broadcasting on " + broadcastIp);
-        this.broadcastIp = broadcastIp;
+    public BroadcastFinder start(InetAddress broadcastAddr, int providerPort, int finderPort) {
+        System.out.println("Broadcasting on " + broadcastAddr);
+        this.broadcastAddr = broadcastAddr;
         this.providerPort = providerPort;
         this.finderPort = finderPort;
 
