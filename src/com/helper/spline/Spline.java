@@ -22,7 +22,8 @@ public abstract class Spline {
     }
 
     /**
-     * Pre-compute some coefficents for advanced type of splines (cubic, natural, ...)
+     * Pre-compute some coefficents for advanced type of splines (cubic,
+     * natural, ...)
      */
     public void computeCoeffs() {
     }
@@ -40,7 +41,7 @@ public abstract class Spline {
     abstract double derivate(double time, int index);
 
     public double getDuration() {
-        return times[times.length - 1];
+        return times[times.length - nMin - 1];
     }
 
     /**

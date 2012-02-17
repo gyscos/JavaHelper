@@ -13,7 +13,8 @@ public class CatmullRomSpline extends Spline {
         result.addValue(-dt, values[1]);
         for (int i = 0; i < values.length; i++)
             result.addValue(dt * i, values[i]);
-        result.addValue(-dt, values[values.length - 2]);
+        result.addValue(dt * values.length, values[values.length - 2]);
+        result.computeCoeffs();
 
         return result;
     }
@@ -27,7 +28,8 @@ public class CatmullRomSpline extends Spline {
         result.addPoint(-dt, values[1]);
         for (int i = 0; i < values.length; i++)
             result.addPoint(dt * i, values[i]);
-        result.addPoint(-dt, values[values.length - 2]);
+        result.addPoint(dt * values.length, values[values.length - 2]);
+        result.computeCoeffs();
 
         return result;
     }

@@ -3,10 +3,10 @@ package com.helper.spline;
 import com.helper.geometry.PointD;
 
 public class Spline2D {
-    Spline         splineX;
-    Spline         splineY;
+    Spline               splineX;
+    Spline               splineY;
 
-    private PointD workPoint = new PointD();
+    private final PointD workPoint = new PointD();
 
     public Spline2D(final Spline splineX, final Spline splineY) {
         this.splineX = splineX;
@@ -25,6 +25,11 @@ public class Spline2D {
 
     public Spline2D addPoint(final double time, final PointD value) {
         return addPoint(time, value.x, value.y);
+    }
+
+    public void computeCoeffs() {
+        splineX.computeCoeffs();
+        splineY.computeCoeffs();
     }
 
     public PointD derivate(final double time) {
