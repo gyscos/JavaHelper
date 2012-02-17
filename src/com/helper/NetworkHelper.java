@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 public class NetworkHelper {
@@ -14,7 +15,10 @@ public class NetworkHelper {
             while (list.hasMoreElements()) {
                 NetworkInterface nI = list.nextElement();
                 if (nI.isLoopback())
-                    continue;
+                    if (list.hasMoreElements())
+                        continue;
+                    else
+                        return InetAddress.getByName("127.0.0.1");
 
                 for (InterfaceAddress addr : nI.getInterfaceAddresses()) {
                     InetAddress broadcast = addr.getBroadcast();
@@ -23,6 +27,9 @@ public class NetworkHelper {
                 }
             }
         } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
