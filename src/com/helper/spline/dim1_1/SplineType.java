@@ -1,4 +1,5 @@
-package com.helper.spline;
+package com.helper.spline.dim1_1;
+
 
 public enum SplineType {
     NATURAL, CATMULLROM, LINEAR;

@@ -1,6 +1,7 @@
-package com.helper.spline;
+package com.helper.spline.dim1_1;
 
 import com.helper.geometry.PointD;
+import com.helper.spline.dim1_2.Spline2D;
 
 public class CatmullRomSpline extends Spline {
 
@@ -79,7 +80,7 @@ public class CatmullRomSpline extends Spline {
     }
 
     @Override
-    double derivate(final double time, final int i) {
+    protected double derivate(final double time, final int i) {
 
         double Tb = times[i + 1];
         double Ta = times[i];
@@ -91,7 +92,7 @@ public class CatmullRomSpline extends Spline {
     }
 
     @Override
-    double interpolate(final double time, final int i) {
+    protected double interpolate(final double time, final int i) {
 
         double Tb = times[i + 1];
         double Ta = times[i];
@@ -103,7 +104,7 @@ public class CatmullRomSpline extends Spline {
     }
 
     @Override
-    double rederivate(double time, int i) {
+    protected double rederivate(double time, int i) {
 
         double Tb = times[i + 1];
         double Ta = times[i];

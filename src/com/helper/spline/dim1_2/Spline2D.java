@@ -1,6 +1,8 @@
-package com.helper.spline;
+package com.helper.spline.dim1_2;
 
 import com.helper.geometry.PointD;
+import com.helper.spline.dim1_1.Spline;
+import com.helper.spline.dim1_1.SplineType;
 
 public class Spline2D {
     Spline               splineX;

@@ -1,14 +1,14 @@
-package com.helper.spline;
+package com.helper.spline.dim1_1;
 
 public abstract class Spline {
-    double[] times;
-    double[] values;
+    protected double[] times;
+    protected double[] values;
 
-    int      nMin;
+    protected int      nMin;
 
-    int      k = 0;
+    int                k = 0;
 
-    Spline(final int nMin, final int n) {
+    public Spline(final int nMin, final int n) {
         this.nMin = nMin;
         times = new double[n];
         values = new double[n];
@@ -38,7 +38,7 @@ public abstract class Spline {
         return derivate(time, index);
     }
 
-    abstract double derivate(double time, int index);;
+    protected abstract double derivate(double time, int index);;
 
     public double getDuration() {
         return times[times.length - nMin - 1];
@@ -76,7 +76,7 @@ public abstract class Spline {
         return interpolate(time, index);
     }
 
-    abstract double interpolate(final double time, int index);
+    protected abstract double interpolate(final double time, int index);
 
     public void print(double dt) {
         if (dt == 0)
@@ -96,5 +96,5 @@ public abstract class Spline {
         return rederivate(time, index);
     }
 
-    abstract double rederivate(double time, int index);
+    protected abstract double rederivate(double time, int index);
 }

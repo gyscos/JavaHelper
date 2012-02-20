@@ -1,6 +1,7 @@
-package com.helper.spline;
+package com.helper.spline.dim1_1;
 
 import com.helper.geometry.PointD;
+import com.helper.spline.dim1_2.Spline2D;
 
 /**
  * A linear spline, that interpolates values in a linear fashion.
@@ -50,7 +51,7 @@ public class LinearSpline extends Spline {
     }
 
     @Override
-    public double derivate(final double time, final int index) {
+    protected double derivate(final double time, final int index) {
         double a = values[index];
         double b = values[index + 1];
 
@@ -60,7 +61,7 @@ public class LinearSpline extends Spline {
     }
 
     @Override
-    double interpolate(final double time, final int index) {
+    protected double interpolate(final double time, final int index) {
         if (index == values.length)
             return values[values.length - 1];
 
@@ -74,7 +75,7 @@ public class LinearSpline extends Spline {
     }
 
     @Override
-    double rederivate(double time, int index) {
+    protected double rederivate(double time, int index) {
         return 0;
     }
 

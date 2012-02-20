@@ -1,4 +1,5 @@
-package com.helper.spline;
+package com.helper.spline.dim1_1;
+
 
 public class NaturalSpline extends Spline {
 
@@ -51,7 +52,7 @@ public class NaturalSpline extends Spline {
     }
 
     @Override
-    double derivate(final double time, final int i) {
+    protected double derivate(final double time, final int i) {
 
         double h = times[i + 1] - times[i];
 
@@ -70,7 +71,7 @@ public class NaturalSpline extends Spline {
     }
 
     @Override
-    double interpolate(final double time, final int i) {
+    protected double interpolate(final double time, final int i) {
 
         // C-style !
         double h;
@@ -90,7 +91,7 @@ public class NaturalSpline extends Spline {
     }
 
     @Override
-    double rederivate(double time, int i) {
+    protected double rederivate(double time, int i) {
 
         double h = times[i + 1] - times[i];
 
