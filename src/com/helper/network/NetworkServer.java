@@ -29,16 +29,6 @@ public abstract class NetworkServer {
             super(c);
         }
 
-        @Override
-        public synchronized void close() {
-            try {
-                super.close();
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
         public void start(final Socket socket) {
             t = new Thread() {
                 @Override
@@ -48,6 +38,15 @@ public abstract class NetworkServer {
                 }
             };
             t.start();
+        }
+
+        public synchronized void stop() {
+            try {
+                close();
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

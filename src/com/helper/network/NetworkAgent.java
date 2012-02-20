@@ -32,7 +32,8 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
         commands.put(command, cmdId);
     }
 
-    public synchronized void close() {
+    public void close() {
+        System.out.println("Network agent closing unsynced...");
         try {
             running = false;
 
@@ -42,12 +43,18 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Network agent closed unsynced...");
+    }
+
+    public String getIp() {
+        return socket.getInetAddress().getHostAddress();
     }
 
     public abstract void handleCommand(T command, String[] data);
 
     public boolean handleUrgent(String command, String[] data) {
         if (command.equals("QUIT")) {
+            System.out.println("Closing agent FROM URGENT HANDLING !");
             close();
             return true;
         }
@@ -59,8 +66,10 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
      */
     public abstract void onConnect();
 
-    public void onDisconnect() {
-    }
+    /**
+     * Called when the connection was lost.
+     */
+    public abstract void onDisconnect();
 
     public void run() {
         try {
@@ -87,13 +96,15 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
                 if (!handleUrgent(command, data))
                     handleCommand(commands.get(command), data);
             }
-            // System.out.println("Clean disconnection.");
+            System.out.println("Clean disconnection.");
             close();
+            System.out.println("Closed. Cool.");
         } catch (SocketException e) {
-            // System.out.println("Socket Exception !");
+            System.out.println("Socket Exception !");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Calling onDisconnect...");
         onDisconnect();
     }
 
