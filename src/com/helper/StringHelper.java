@@ -12,7 +12,7 @@ public class StringHelper {
         return merge(".", list);
     }
 
-    public static String merge(String del, double[] list) {
+    public static String merge(String del, double... list) {
         if (list.length == 0)
             return "";
 
@@ -23,7 +23,7 @@ public class StringHelper {
         return result;
     }
 
-    public static String merge(String del, Object[] list) {
+    public static String merge(String del, Object... list) {
         if (list.length == 0)
             return "";
 
