@@ -12,6 +12,17 @@ public class StringHelper {
         return merge(".", list);
     }
 
+    public static String merge(String del, double[] list) {
+        if (list.length == 0)
+            return "";
+
+        String result = "" + list[0];
+        for (int i = 1; i < list.length; i++)
+            result += del + list[i];
+
+        return result;
+    }
+
     public static String merge(String del, Object[] list) {
         if (list.length == 0)
             return "";

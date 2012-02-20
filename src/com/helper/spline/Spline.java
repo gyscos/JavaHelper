@@ -36,9 +36,9 @@ public abstract class Spline {
         if (index < 0)
             index = 0;
         return derivate(time, index);
-    };
+    }
 
-    abstract double derivate(double time, int index);
+    abstract double derivate(double time, int index);;
 
     public double getDuration() {
         return times[times.length - nMin - 1];
@@ -77,6 +77,17 @@ public abstract class Spline {
     }
 
     abstract double interpolate(final double time, int index);
+
+    public void print(double dt) {
+        if (dt == 0)
+            return;
+
+        double t = 0;
+        while (t <= getDuration()) {
+            System.out.println("T = " + t + " :: " + interpolate(t));
+            t += dt;
+        }
+    }
 
     public double rederivate(final double time) {
         int index = getPreviousIndex(time);
