@@ -62,7 +62,10 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
     }
 
     protected boolean handleCommand(T command, String[] data) {
-        return handler.handleCommand(command, data);
+        if (handler != null)
+            return handler.handleCommand(command, data);
+        else
+            return false;
     }
 
     public boolean handleUrgent(String command, String[] data) {
@@ -75,11 +78,13 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
     }
 
     protected void onConnect() {
-        handler.onConnect(getIp());
+        if (handler != null)
+            handler.onConnect(getIp());
     }
 
     protected void onDisconnect() {
-        handler.onDisconnect();
+        if (handler != null)
+            handler.onDisconnect();
     }
 
     public void run() {
