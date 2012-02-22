@@ -12,7 +12,7 @@ public abstract class NetworkHandler<T extends Enum<T> & NetworkCommand> {
         this.agent = agent;
     }
 
-    public abstract void handleCommand(T command, String[] data);
+    public abstract boolean handleCommand(T command, String[] data);
 
     /**
      * Allows to say "Hi" on connect.

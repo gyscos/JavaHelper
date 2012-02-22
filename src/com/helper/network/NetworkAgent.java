@@ -57,8 +57,12 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
         return socket.getInetAddress().getHostAddress();
     }
 
-    protected void handleCommand(T command, String[] data) {
-        handler.handleCommand(command, data);
+    protected boolean handleCommand(String command, String[] data) {
+        return handleCommand(commands.get(command), data);
+    }
+
+    protected boolean handleCommand(T command, String[] data) {
+        return handler.handleCommand(command, data);
     }
 
     public boolean handleUrgent(String command, String[] data) {
@@ -101,7 +105,7 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
                     data = list[1].split(secDelim);
 
                 if (!handleUrgent(command, data))
-                    handleCommand(commands.get(command), data);
+                    handleCommand(command, data);
             }
             System.out.println("Clean disconnection.");
             close();
