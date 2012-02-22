@@ -57,6 +57,10 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
         return socket.getInetAddress().getHostAddress();
     }
 
+    protected void handleCommand(T command, String[] data) {
+        handler.handleCommand(command, data);
+    }
+
     public boolean handleUrgent(String command, String[] data) {
         if (command.equals("QUIT")) {
             System.out.println("Closing agent FROM URGENT HANDLING !");
@@ -66,9 +70,17 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
         return false;
     }
 
+    protected void onConnect() {
+        handler.onConnect();
+    }
+
+    protected void onDisconnect() {
+        handler.onDisconnect();
+    }
+
     public void run() {
         try {
-            handler.onConnect();
+            onConnect();
 
             while (running) {
                 String line = in.readLine();
@@ -89,7 +101,7 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
                     data = list[1].split(secDelim);
 
                 if (!handleUrgent(command, data))
-                    handler.handleCommand(commands.get(command), data);
+                    handleCommand(commands.get(command), data);
             }
             System.out.println("Clean disconnection.");
             close();
@@ -100,7 +112,7 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
             e.printStackTrace();
         }
         System.out.println("Calling onDisconnect...");
-        handler.onDisconnect();
+        onDisconnect();
     }
 
     private synchronized void send(String msg) {

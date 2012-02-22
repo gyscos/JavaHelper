@@ -16,6 +16,10 @@ public class NetworkClient<T extends Enum<T> & NetworkCommand> extends NetworkAg
         super(c);
     }
 
+    public NetworkClient(Class<T> c, NetworkHandler<T> handler) {
+        super(c, handler);
+    }
+
     public void connect(final String server, final int port) {
         running = true;
 
