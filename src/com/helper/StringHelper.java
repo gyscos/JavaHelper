@@ -33,4 +33,8 @@ public class StringHelper {
 
         return result;
     }
+
+    public static String merge(String del, String... list) {
+        return merge(del, (Object[]) list);
+    }
 }

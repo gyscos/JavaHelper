@@ -33,7 +33,6 @@ public abstract class BroadcastFinder {
         new Thread() {
             @Override
             public void run() {
-                InetAddress addr;
                 try {
                     ask(broadcastAddr);
                 } catch (IOException e) {

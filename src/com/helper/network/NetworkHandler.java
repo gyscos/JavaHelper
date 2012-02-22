@@ -32,6 +32,10 @@ public abstract class NetworkHandler<T extends Enum<T> & NetworkCommand> {
         agent.send(command, data);
     }
 
+    public synchronized void send(T command, String... data) {
+        send(command, (Object[]) data);
+    }
+
     public void setAgent(NetworkAgent<T> agent) {
         this.agent = agent;
     }
