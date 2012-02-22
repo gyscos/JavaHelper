@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 import com.helper.StringHelper;
 
-public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
+public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
     public final static String mainDelim = "::";
 
     public final static String secDelim  = ";";
@@ -22,10 +22,17 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
 
     HashMap<String, T>         commands  = new HashMap<String, T>();
 
+    NetworkHandler<T>          handler;
+
     public NetworkAgent(Class<T> c) {
         for (T t : c.getEnumConstants()) {
             addCommand(t.getName(), t);
         }
+    }
+
+    public NetworkAgent(Class<T> c, NetworkHandler<T> handler) {
+        this(c);
+        setHandler(handler);
     }
 
     public void addCommand(String command, T cmdId) {
@@ -50,8 +57,6 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
         return socket.getInetAddress().getHostAddress();
     }
 
-    public abstract void handleCommand(T command, String[] data);
-
     public boolean handleUrgent(String command, String[] data) {
         if (command.equals("QUIT")) {
             System.out.println("Closing agent FROM URGENT HANDLING !");
@@ -61,19 +66,9 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
         return false;
     }
 
-    /**
-     * Allows to say "Hi" on connect.
-     */
-    public abstract void onConnect();
-
-    /**
-     * Called when the connection was lost.
-     */
-    public abstract void onDisconnect();
-
     public void run() {
         try {
-            onConnect();
+            handler.onConnect();
 
             while (running) {
                 String line = in.readLine();
@@ -94,7 +89,7 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
                     data = list[1].split(secDelim);
 
                 if (!handleUrgent(command, data))
-                    handleCommand(commands.get(command), data);
+                    handler.handleCommand(commands.get(command), data);
             }
             System.out.println("Clean disconnection.");
             close();
@@ -105,7 +100,7 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
             e.printStackTrace();
         }
         System.out.println("Calling onDisconnect...");
-        onDisconnect();
+        handler.onDisconnect();
     }
 
     private synchronized void send(String msg) {
@@ -118,6 +113,11 @@ public abstract class NetworkAgent<T extends Enum<T> & NetworkCommand> {
 
     public synchronized void send(T command, Object... data) {
         send(command.getName(), data);
+    }
+
+    public void setHandler(NetworkHandler<T> handler) {
+        this.handler = handler;
+        handler.setAgent(this);
     }
 
     public synchronized void setup(Socket socket) {
