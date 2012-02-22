@@ -75,7 +75,7 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
     }
 
     protected void onConnect() {
-        handler.onConnect();
+        handler.onConnect(getIp());
     }
 
     protected void onDisconnect() {

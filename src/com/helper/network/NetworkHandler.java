@@ -17,7 +17,7 @@ public abstract class NetworkHandler<T extends Enum<T> & NetworkCommand> {
     /**
      * Allows to say "Hi" on connect.
      */
-    public abstract void onConnect();
+    public abstract void onConnect(String ip);
 
     /**
      * Called when the connection was lost.
