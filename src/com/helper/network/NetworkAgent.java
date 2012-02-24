@@ -39,8 +39,7 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
         commands.put(command, cmdId);
     }
 
-    public void close() {
-        System.out.println("Network agent closing unsynced...");
+    public synchronized void close() {
         try {
             running = false;
 
@@ -50,7 +49,6 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Network agent closed unsynced...");
     }
 
     public String getIp() {
@@ -70,7 +68,6 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
 
     public boolean handleUrgent(String command, String[] data) {
         if (command.equals("QUIT")) {
-            System.out.println("Closing agent FROM URGENT HANDLING !");
             close();
             return true;
         }
@@ -114,13 +111,11 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
             }
             System.out.println("Clean disconnection.");
             close();
-            System.out.println("Closed. Cool.");
         } catch (SocketException e) {
             System.out.println("Socket Exception !");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Calling onDisconnect...");
         onDisconnect();
     }
 

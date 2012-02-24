@@ -4,6 +4,13 @@ import com.helper.plan.Memory;
 
 public abstract class Value {
 
+    /**
+     * Computes the result of the value and returns it in a eventually new
+     * value.
+     * 
+     * @param memory
+     * @return
+     */
     public Value compute(Memory memory) {
         return this;
     }
