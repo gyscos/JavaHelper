@@ -33,13 +33,16 @@ public class NetworkHelper {
             Enumeration<NetworkInterface> list = NetworkInterface.getNetworkInterfaces();
             while (list.hasMoreElements()) {
                 NetworkInterface nI = list.nextElement();
-                if (nI.isLoopback())
-                    if (list.hasMoreElements())
-                        continue;
-                    else
-                        return nI;
+                if(!nI.getInterfaceAddresses().isEmpty()){
+                	if (nI.isLoopback())
+                		if (list.hasMoreElements())
+                			continue;
+                		else
+                			return nI;
+               
 
                 return nI;
+                }
             }
         } catch (SocketException e) {
             e.printStackTrace();
