@@ -52,7 +52,10 @@ public class NetworkAgent<T extends Enum<T> & NetworkCommand> {
     }
 
     public String getIp() {
-        return socket.getInetAddress().getHostAddress();
+        if (socket != null)
+            return socket.getInetAddress().getHostAddress();
+        else
+            return "127.0.0.1";
     }
 
     protected boolean handleCommand(String command, String[] data) {
