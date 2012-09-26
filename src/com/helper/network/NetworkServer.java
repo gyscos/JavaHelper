@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 
+
 /**
  * Network server that listens on a specific port and accept connections from
  * clients in separate threads.
@@ -12,7 +13,7 @@ import java.util.LinkedList;
  * @author gyscos
  * 
  */
-public abstract class NetworkServer<T extends Enum<T> & NetworkCommand> {
+public abstract class NetworkServer {
 
     /**
      * Worker thread that handles a single connection with a client.
@@ -20,14 +21,14 @@ public abstract class NetworkServer<T extends Enum<T> & NetworkCommand> {
      * @author gyscos
      * 
      */
-    public static class ServerAgent<T extends Enum<T> & NetworkCommand> {
+    public static class ServerAgent {
 
-        NetworkActor<T> agent;
+        NetworkAgent agent;
 
-        Thread          t;
+        Thread       t;
 
-        public ServerAgent(Class<T> c, NetworkHandler<T> handler) {
-            agent = new NetworkActor<T>(c, handler);
+        public ServerAgent(NetworkHandler handler) {
+            agent = new NetworkAgent(handler);
         }
 
         public void start(final Socket socket) {
@@ -51,15 +52,13 @@ public abstract class NetworkServer<T extends Enum<T> & NetworkCommand> {
         }
     }
 
-    Thread                            thread;
-    ServerSocket                      socket;
-    boolean                           running = false;
-    Class<T>                          tClass;
+    Thread                         thread;
+    ServerSocket                   socket;
+    boolean                        running = false;
 
-    public LinkedList<ServerAgent<?>> agents  = new LinkedList<ServerAgent<?>>();
+    public LinkedList<ServerAgent> agents  = new LinkedList<ServerAgent>();
 
-    public NetworkServer(Class<T> tClass) {
-        this.tClass = tClass;
+    public NetworkServer() {
     }
 
     public void close() {
@@ -67,7 +66,7 @@ public abstract class NetworkServer<T extends Enum<T> & NetworkCommand> {
             running = false;
             socket.close();
             synchronized (agents) {
-                for (ServerAgent<?> agent : agents)
+                for (ServerAgent agent : agents)
                     agent.stop();
             }
         } catch (IOException e) {
@@ -75,7 +74,7 @@ public abstract class NetworkServer<T extends Enum<T> & NetworkCommand> {
         }
     }
 
-    public abstract NetworkHandler<T> getHandler();
+    public abstract NetworkHandler getHandler();
 
     /**
      * Tells the server to listen on the given port.
@@ -94,7 +93,7 @@ public abstract class NetworkServer<T extends Enum<T> & NetworkCommand> {
         thread.start();
     }
 
-    public void onHandlerDone(ServerAgent<?> handler) {
+    public void onHandlerDone(ServerAgent handler) {
         synchronized (agents) {
             agents.remove(handler);
         }
@@ -104,8 +103,8 @@ public abstract class NetworkServer<T extends Enum<T> & NetworkCommand> {
         try {
             while (running) {
                 final Socket client = socket.accept();
-                NetworkHandler<T> handler = getHandler();
-                ServerAgent<T> agent = new ServerAgent<T>(tClass, handler);
+                NetworkHandler handler = getHandler();
+                ServerAgent agent = new ServerAgent(handler);
 
                 agent.start(client);
                 synchronized (agents) {

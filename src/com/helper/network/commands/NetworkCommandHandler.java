@@ -1,79 +1,70 @@
-package com.helper.network;
+package com.helper.network.commands;
 
 import java.util.HashMap;
 
 import com.helper.StringHelper;
+import com.helper.network.NetworkHandler;
 
-public class NetworkActor<T extends Enum<T> & NetworkCommand> extends
-        NetworkAgent {
+public abstract class NetworkCommandHandler<T extends Enum<T> & NetworkCommand>
+        extends NetworkHandler {
+
     public final static String mainDelim = "::";
-
     public final static String secDelim  = ";";
 
     HashMap<String, T>         commands  = new HashMap<String, T>();
 
-    NetworkHandler<T>          handler;
+    public NetworkCommandHandler(Class<T> c) {
+        super();
 
-    public NetworkActor(Class<T> c) {
         for (T t : c.getEnumConstants()) {
             addCommand(t.getName(), t);
         }
     }
 
-    public NetworkActor(Class<T> c, NetworkHandler<T> handler) {
+    public NetworkCommandHandler(Class<T> c, NetworkCommandAgent<T> agent) {
         this(c);
-        setHandler(handler);
+        setAgent(agent);
     }
 
     public void addCommand(String command, T cmdId) {
         commands.put(command, cmdId);
     }
 
+    @SuppressWarnings("unchecked")
+    protected NetworkCommandAgent<T> getCommandAgent() {
+        return (NetworkCommandAgent<T>) agent;
+    }
+
     protected boolean handleCommand(String command, String[] data) {
         return handleCommand(commands.get(command), data);
     }
 
-    protected boolean handleCommand(T command, String[] data) {
-        if (handler != null)
-            return handler.handleCommand(command, data);
-        else
-            return false;
-    }
+    public abstract boolean handleCommand(T command, String[] data);
 
     @Override
-    protected void handleMessage(String line) {
+    public boolean handleMessage(String line) {
         String[] list = line.split(mainDelim);
         if (list.length == 0)
             // ??
-            return;
+            return false;
 
         String command = list[0];
         String[] data = null;
         if (list.length > 1)
             data = list[1].split(secDelim);
 
-        if (!handleUrgent(command, data))
-            handleCommand(command, data);
+        if (handleUrgent(command, data))
+            return true;
+
+        return handleCommand(command, data);
     }
 
     public boolean handleUrgent(String command, String[] data) {
         if (command.equals("QUIT")) {
-            close();
+            agent.close();
             return true;
         }
         return false;
-    }
-
-    @Override
-    protected void onConnect() {
-        if (handler != null)
-            handler.onConnect(getIp());
-    }
-
-    @Override
-    protected void onDisconnect() {
-        if (handler != null)
-            handler.onDisconnect();
     }
 
     public synchronized void send(String command, Object... data) {
@@ -84,9 +75,11 @@ public class NetworkActor<T extends Enum<T> & NetworkCommand> extends
         send(command.getName(), data);
     }
 
-    public void setHandler(NetworkHandler<T> handler) {
-        this.handler = handler;
-        handler.setAgent(this);
+    public synchronized void send(T command, String... data) {
+        send(command, (Object[]) data);
     }
 
+    public void setAgent(NetworkCommandAgent<T> agent) {
+        super.setAgent(agent);
+    }
 }

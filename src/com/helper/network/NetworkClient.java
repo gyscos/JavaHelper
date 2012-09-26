@@ -3,21 +3,22 @@ package com.helper.network;
 import java.io.IOException;
 import java.net.Socket;
 
+
 /**
  * 
  * @author gyscos
  * 
  */
-public class NetworkClient<T extends Enum<T> & NetworkCommand> extends NetworkActor<T> {
+public class NetworkClient extends NetworkAgent {
 
     Thread thread;
 
-    public NetworkClient(Class<T> c) {
-        super(c);
+    public NetworkClient() {
+        super();
     }
 
-    public NetworkClient(Class<T> c, NetworkHandler<T> handler) {
-        super(c, handler);
+    public NetworkClient(NetworkHandler handler) {
+        super(handler);
     }
 
     public void connect(final String server, final int port) {

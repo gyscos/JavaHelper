@@ -7,12 +7,21 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
-public abstract class NetworkAgent {
-    Socket         socket;
-    PrintWriter    out;
-    BufferedReader in;
+public class NetworkAgent {
+    protected Socket         socket;
+    protected PrintWriter    out;
+    protected BufferedReader in;
 
-    boolean        running = false;
+    protected NetworkHandler handler;
+
+    protected boolean        running = false;
+
+    public NetworkAgent() {
+    }
+
+    public NetworkAgent(NetworkHandler handler) {
+        setHandler(handler);
+    }
 
     public synchronized void close() {
         try {
@@ -33,11 +42,20 @@ public abstract class NetworkAgent {
             return "127.0.0.1";
     }
 
-    protected abstract void handleMessage(String line);
+    protected void handleMessage(String line) {
+        if (handler != null)
+            handler.handleMessage(line);
+    }
 
-    protected abstract void onConnect();
+    protected void onConnect() {
+        if (handler != null)
+            handler.onConnect(getIp());
+    }
 
-    protected abstract void onDisconnect();
+    protected void onDisconnect() {
+        if (handler != null)
+            handler.onDisconnect();
+    }
 
     public void run() {
         try {
@@ -64,8 +82,13 @@ public abstract class NetworkAgent {
         onDisconnect();
     }
 
-    private synchronized void send(String msg) {
+    public synchronized void send(String msg) {
         out.println(msg);
+    }
+
+    public void setHandler(NetworkHandler handler) {
+        this.handler = handler;
+        handler.setAgent(this);
     }
 
     public synchronized void setup(Socket socket) {

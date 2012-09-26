@@ -1,18 +1,17 @@
 package com.helper.network;
 
-public abstract class NetworkHandler<T extends Enum<T> & NetworkCommand> {
+public abstract class NetworkHandler {
 
-    protected NetworkActor<T> agent;
+    protected NetworkAgent agent;
 
     public NetworkHandler() {
-
     }
 
-    public NetworkHandler(NetworkActor<T> agent) {
-        this.agent = agent;
+    public NetworkHandler(NetworkAgent agent) {
+        setAgent(agent);
     }
 
-    public abstract boolean handleCommand(T command, String[] data);
+    public abstract boolean handleMessage(String line);
 
     /**
      * Allows to say "Hi" on connect.
@@ -24,20 +23,11 @@ public abstract class NetworkHandler<T extends Enum<T> & NetworkCommand> {
      */
     public abstract void onDisconnect();
 
-    public synchronized void send(String command, Object... data) {
-        agent.send(command, data);
+    public synchronized void send(String line) {
+        agent.send(line);
     }
 
-    public synchronized void send(T command, Object... data) {
-        agent.send(command, data);
-    }
-
-    public synchronized void send(T command, String... data) {
-        send(command, (Object[]) data);
-    }
-
-    public void setAgent(NetworkActor<T> agent) {
+    public void setAgent(NetworkAgent agent) {
         this.agent = agent;
     }
-
 }
