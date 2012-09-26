@@ -8,7 +8,7 @@ import java.net.Socket;
  * @author gyscos
  * 
  */
-public class NetworkClient<T extends Enum<T> & NetworkCommand> extends NetworkAgent<T> {
+public class NetworkClient<T extends Enum<T> & NetworkCommand> extends NetworkActor<T> {
 
     Thread thread;
 

@@ -2,13 +2,13 @@ package com.helper.network;
 
 public abstract class NetworkHandler<T extends Enum<T> & NetworkCommand> {
 
-    protected NetworkAgent<T> agent;
+    protected NetworkActor<T> agent;
 
     public NetworkHandler() {
 
     }
 
-    public NetworkHandler(NetworkAgent<T> agent) {
+    public NetworkHandler(NetworkActor<T> agent) {
         this.agent = agent;
     }
 
@@ -36,7 +36,7 @@ public abstract class NetworkHandler<T extends Enum<T> & NetworkCommand> {
         send(command, (Object[]) data);
     }
 
-    public void setAgent(NetworkAgent<T> agent) {
+    public void setAgent(NetworkActor<T> agent) {
         this.agent = agent;
     }
 

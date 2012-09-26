@@ -22,12 +22,12 @@ public abstract class NetworkServer<T extends Enum<T> & NetworkCommand> {
      */
     public static class ServerAgent<T extends Enum<T> & NetworkCommand> {
 
-        NetworkAgent<T> agent;
+        NetworkActor<T> agent;
 
         Thread          t;
 
         public ServerAgent(Class<T> c, NetworkHandler<T> handler) {
-            agent = new NetworkAgent<T>(c, handler);
+            agent = new NetworkActor<T>(c, handler);
         }
 
         public void start(final Socket socket) {
