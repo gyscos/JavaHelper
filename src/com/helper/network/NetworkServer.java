@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 
-
 /**
  * Network server that listens on a specific port and accept connections from
  * clients in separate threads.
@@ -69,7 +68,10 @@ public abstract class NetworkServer {
                 for (ServerAgent agent : agents)
                     agent.stop();
             }
+            thread.join();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
