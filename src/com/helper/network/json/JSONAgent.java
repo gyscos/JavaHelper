@@ -68,7 +68,7 @@ public class JSONAgent {
         return read_JSON();
     }
 
-    public void answer(JSONHandler handler, boolean threaded) {
+    public void answer(final JSONHandler handler, boolean threaded) {
         Thread thread = new Thread() {
             @Override
             public void run() {
