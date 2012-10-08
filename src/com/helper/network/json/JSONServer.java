@@ -1,5 +1,7 @@
 package com.helper.network.json;
 
+import java.net.SocketException;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,6 +13,10 @@ public abstract class JSONServer {
     ServerSocket socket;
     Thread thread;
     boolean running = false;
+
+    public boolean isRunning() {
+        return running;
+    }
 
     public void start(final int port) {
         running = true;
@@ -49,6 +55,8 @@ public abstract class JSONServer {
                 final Socket client = socket.accept();
                 JSONAgent.setup(client).answer(getHandler(), true);
             }
+        } catch(SocketException e) {
+            // Socket closed. All is well.
         } catch (IOException e) {
             e.printStackTrace();
         }
