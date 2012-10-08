@@ -1,4 +1,4 @@
-package com.helper.network;
+package com.helper.network.json;
 
 import java.io.IOException;
 import java.net.Socket;
