@@ -1,5 +1,7 @@
 package com.helper;
 
+import java.io.IOException;
+
 public class StringHelper {
 
     public static String broadcastize(String ip) {
@@ -36,5 +38,20 @@ public class StringHelper {
 
     public static String merge(String del, String... list) {
         return merge(del, (Object[]) list);
+    }
+
+    // TODO ! Base64 ?
+    public static byte[] stringToBytes(String str) {
+        try {
+            return Base64.decode(str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // TODO ! Base64 ?
+    public static String bytesToString(byte[] bytes) {
+        return Base64.encodeBytes(bytes);
     }
 }

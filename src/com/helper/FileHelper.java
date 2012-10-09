@@ -8,13 +8,15 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.IOException;
 
-class FileHelper {
-    public static void writeToFile(String filename, String content) throws FileNotFoundException {
+public class FileHelper {
+    public static void writeToFile(String filename, String content) {
         try {
             PrintWriter writer = new PrintWriter(filename, "UTF-8");
             writer.println(content);
             writer.close();
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
