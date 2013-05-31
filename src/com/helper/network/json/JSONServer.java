@@ -1,34 +1,16 @@
 package com.helper.network.json;
 
-import java.net.SocketException;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
+import java.net.SocketException;
 
 public abstract class JSONServer {
-    public abstract JSONHandler getHandler();
-
     ServerSocket socket;
-    Thread thread;
-    boolean running = false;
 
-    public boolean isRunning() {
-        return running;
-    }
+    Thread       thread;
+    boolean      running = false;
 
-    public void start(final int port) {
-        running = true;
-        thread = new Thread() {
-            @Override
-            public void run() {
-                JSONServer.this.setup(port);
-                JSONServer.this.run();
-            }
-        };
-        thread.start();
-    }
     public void close() {
         try {
             running = false;
@@ -41,12 +23,10 @@ public abstract class JSONServer {
         }
     }
 
-    public void setup(int port) {
-        try {
-            socket = new ServerSocket(port);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public abstract JSONHandler getHandler();
+
+    public boolean isRunning() {
+        return running;
     }
 
     public void run() {
@@ -55,10 +35,30 @@ public abstract class JSONServer {
                 final Socket client = socket.accept();
                 JSONAgent.setup(client).answer(getHandler(), true);
             }
-        } catch(SocketException e) {
+        } catch (SocketException e) {
             // Socket closed. All is well.
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setup(int port) {
+        try {
+            socket = new ServerSocket(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void start(final int port) {
+        running = true;
+        thread = new Thread() {
+            @Override
+            public void run() {
+                JSONServer.this.setup(port);
+                JSONServer.this.run();
+            }
+        };
+        thread.start();
     }
 }

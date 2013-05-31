@@ -7,11 +7,25 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
+/**
+ * An entity on the network. Can send and receive messages.
+ * 
+ * @author gyscos
+ * 
+ */
 public class NetworkAgent {
+    /**
+     * Network backend
+     */
     protected Socket         socket;
+
+    // Helper class to ease I/O
     protected PrintWriter    out;
     protected BufferedReader in;
 
+    /**
+     * Handler to do the actual work in case of events.
+     */
     protected NetworkHandler handler;
 
     protected boolean        running = false;
@@ -42,21 +56,39 @@ public class NetworkAgent {
             return "127.0.0.1";
     }
 
+    /**
+     * React to an incoming network message.
+     * 
+     * @param line
+     *            Content of the message.
+     */
     protected void handleMessage(String line) {
+        // Redirect incoming message to handler
         if (handler != null)
             handler.handleMessage(line);
     }
 
+    /**
+     * React to a network connection
+     */
     protected void onConnect() {
         if (handler != null)
             handler.onConnect(getIp());
     }
 
+    /**
+     * React to a network disconnection
+     */
     protected void onDisconnect() {
         if (handler != null)
             handler.onDisconnect();
     }
 
+    /**
+     * Assume setup() has been called. Starts listening to events.
+     * This will block until the connection is lost. Run this in separate
+     * thread.
+     */
     public void run() {
         try {
             onConnect();
@@ -78,8 +110,9 @@ public class NetworkAgent {
             System.out.println("Socket Exception !");
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            onDisconnect();
         }
-        onDisconnect();
     }
 
     public synchronized void send(String msg) {
@@ -91,15 +124,24 @@ public class NetworkAgent {
         handler.setAgent(this);
     }
 
+    /**
+     * Setup the network connection used by this agent.
+     * 
+     * @param socket
+     *            Already open network socket used by the agent.
+     */
     public synchronized void setup(Socket socket) {
         try {
             this.socket = socket;
+
+            // Create our nice utils
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(
                     socket.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // And turn on the green light.
         running = true;
     }
 

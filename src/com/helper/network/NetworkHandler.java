@@ -1,5 +1,11 @@
 package com.helper.network;
 
+/**
+ * Slave class used by a network agent to do the actual work.
+ * 
+ * @author gyscos
+ * 
+ */
 public abstract class NetworkHandler {
 
     protected NetworkAgent agent;
@@ -11,6 +17,13 @@ public abstract class NetworkHandler {
         setAgent(agent);
     }
 
+    /**
+     * Handle an incoming network message.
+     * 
+     * @param line
+     *            Content of the message.
+     * @return
+     */
     public abstract boolean handleMessage(String line);
 
     /**

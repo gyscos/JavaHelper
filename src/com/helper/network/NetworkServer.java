@@ -76,6 +76,12 @@ public abstract class NetworkServer {
         }
     }
 
+    /**
+     * Creates a handler to manage a new connection.
+     * Must be overriden by the actual implementation.
+     * 
+     * @return
+     */
     public abstract NetworkHandler getHandler();
 
     /**

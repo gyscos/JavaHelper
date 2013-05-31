@@ -1,14 +1,19 @@
 package com.helper.network.json.rpc;
 
-import com.helper.network.json.JSONHandler;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.helper.network.json.JSONHandler;
+
+/**
+ * JSON handler implementation that specifically handle a JSON-RPC conversation.
+ * 
+ * @author gyscos
+ * 
+ */
 public abstract class JSONRpcHandler implements JSONHandler {
 
-    public abstract Object getResult(String method, Object params);
-
+    @Override
     public JSONObject getAnswer(JSONObject command) {
 
         try {
@@ -31,4 +36,13 @@ public abstract class JSONRpcHandler implements JSONHandler {
         return null;
 
     }
+
+    /**
+     * Actually react to a command.
+     * 
+     * @param method
+     * @param params
+     * @return
+     */
+    public abstract Object getResult(String method, Object params);
 }

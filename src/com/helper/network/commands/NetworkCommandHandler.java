@@ -5,6 +5,14 @@ import java.util.HashMap;
 import com.helper.StringHelper;
 import com.helper.network.NetworkHandler;
 
+/**
+ * Network handler implementation that uses a delimiter-based protocol, and a
+ * list of possible commands as enums.
+ * 
+ * @author gyscos
+ * 
+ * @param <T>
+ */
 public abstract class NetworkCommandHandler<T extends Enum<T> & NetworkCommand>
         extends NetworkHandler {
 

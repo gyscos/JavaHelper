@@ -3,6 +3,12 @@ package com.helper.thread;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Generic worker pool implementation.
+ * 
+ * @author gyscos
+ * 
+ */
 public class WorkerPool implements Runnable {
     LinkedList<Runnable> tasks;
 
@@ -13,11 +19,14 @@ public class WorkerPool implements Runnable {
     boolean              waiting = true;
 
     /**
-     * Creates a worker pool with the given number of threads
+     * Creates a worker pool with a fixed number of threads.
      * 
      * @param n
+     *            Number of threads used. Should be > 0.
      */
     public WorkerPool(int n) {
+        assert (n > 0);
+
         this.n = n;
     }
 
@@ -26,11 +35,18 @@ public class WorkerPool implements Runnable {
         notifyAll();
     }
 
-    public void createThreads() {
+    /**
+     * Fill the pool with fresh workers.
+     */
+    synchronized void createThreads() {
+        workers.clear();
         for (int i = 0; i < n; i++)
             workers.add(new Thread(this));
     }
 
+    /**
+     * Wait for everyone to come home, and close the shop.
+     */
     public void end() {
         // All tasks should have been added by now.
         waiting = false;
@@ -43,14 +59,17 @@ public class WorkerPool implements Runnable {
             }
     }
 
-    public synchronized Runnable getTask() {
+    synchronized Runnable getTask() {
         if (tasks.isEmpty())
             return null;
         return tasks.removeFirst();
     }
 
+    /**
+     * Start working !
+     * This will return when all tasks are completed.
+     */
     public void launch() {
-        createThreads();
         start();
         end();
     }
@@ -76,6 +95,9 @@ public class WorkerPool implements Runnable {
     }
 
     public void start() {
+        if (workers.isEmpty())
+            createThreads();
+
         for (Thread thread : workers)
             thread.start();
     }
