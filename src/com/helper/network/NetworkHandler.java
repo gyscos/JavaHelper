@@ -1,5 +1,9 @@
 package com.helper.network;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * Slave class used by a network agent to do the actual work.
  * 
@@ -18,27 +22,28 @@ public abstract class NetworkHandler {
     }
 
     /**
-     * Handle an incoming network message.
-     * 
-     * @param line
-     *            Content of the message.
-     * @return
-     */
-    public abstract boolean handleMessage(String line);
-
-    /**
      * Allows to say "Hi" on connect.
      */
-    public abstract void onConnect(String ip);
+    public void onConnect(String ip) {
+    }
 
     /**
      * Called when the connection was lost.
      */
-    public abstract void onDisconnect();
-
-    public synchronized void send(String line) {
-        agent.send(line);
+    public void onDisconnect() {
     }
+
+    /**
+     * Read and process an incoming network message.
+     * 
+     * @param in
+     *            Reader used to read the message.
+     * @param out
+     *            Writer used to answer to the message.
+     * @return TRUE if no error occurred.
+     */
+    public abstract boolean readMessage(BufferedReader in, PrintWriter out)
+            throws IOException;
 
     public void setAgent(NetworkAgent agent) {
         this.agent = agent;

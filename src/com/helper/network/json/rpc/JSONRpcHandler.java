@@ -11,7 +11,7 @@ import com.helper.network.json.JSONHandler;
  * @author gyscos
  * 
  */
-public abstract class JSONRpcHandler implements JSONHandler {
+public abstract class JSONRpcHandler extends JSONHandler {
 
     @Override
     public JSONObject getAnswer(JSONObject command) {

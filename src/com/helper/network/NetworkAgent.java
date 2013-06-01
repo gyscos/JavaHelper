@@ -57,18 +57,6 @@ public class NetworkAgent {
     }
 
     /**
-     * React to an incoming network message.
-     * 
-     * @param line
-     *            Content of the message.
-     */
-    protected void handleMessage(String line) {
-        // Redirect incoming message to handler
-        if (handler != null)
-            handler.handleMessage(line);
-    }
-
-    /**
      * React to a network connection
      */
     protected void onConnect() {
@@ -94,15 +82,7 @@ public class NetworkAgent {
             onConnect();
 
             while (running) {
-                String line = in.readLine();
-                // System.out.println("Received : " + line);
-                if (line == null) {
-                    running = false;
-                    break;
-                }
-
-                handleMessage(line);
-
+                running &= handler.readMessage(in, out);
             }
             System.out.println("Clean disconnection.");
             close();
@@ -113,10 +93,6 @@ public class NetworkAgent {
         } finally {
             onDisconnect();
         }
-    }
-
-    public synchronized void send(String msg) {
-        out.println(msg);
     }
 
     public void setHandler(NetworkHandler handler) {
