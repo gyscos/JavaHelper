@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JSONHelper {
+public class JsonHelper {
 
     public static void merge(JSONArray source, JSONArray target)
             throws JSONException {

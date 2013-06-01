@@ -3,7 +3,7 @@ package com.helper.network.json.rpc;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.helper.network.json.JSONHandler;
+import com.helper.network.json.JsonHandler;
 
 /**
  * JSON handler implementation that specifically handle a JSON-RPC conversation.
@@ -11,7 +11,7 @@ import com.helper.network.json.JSONHandler;
  * @author gyscos
  * 
  */
-public abstract class JSONRpcHandler extends JSONHandler {
+public abstract class JsonRpcHandler extends JsonHandler {
 
     @Override
     public JSONObject getAnswer(JSONObject command) {

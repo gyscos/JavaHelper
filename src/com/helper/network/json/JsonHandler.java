@@ -17,7 +17,7 @@ import com.helper.network.NetworkHandler;
  * @author gyscos
  * 
  */
-public abstract class JSONHandler extends NetworkHandler {
+public abstract class JsonHandler extends NetworkHandler {
     public abstract JSONObject getAnswer(JSONObject command);
 
     @Override
