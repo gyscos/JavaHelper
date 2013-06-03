@@ -2,7 +2,6 @@ package com.helper.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * Slave class used by a network agent to do the actual work.
@@ -42,7 +41,7 @@ public abstract class NetworkHandler {
      *            Writer used to answer to the message.
      * @return TRUE if no error occurred.
      */
-    public abstract boolean readMessage(BufferedReader in, PrintWriter out)
+    public abstract boolean readMessage(BufferedReader in)
             throws IOException;
 
     public void setAgent(NetworkAgent agent) {

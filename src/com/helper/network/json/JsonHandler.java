@@ -2,7 +2,6 @@ package com.helper.network.json;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,22 +17,26 @@ import com.helper.network.NetworkHandler;
  * 
  */
 public abstract class JsonHandler extends NetworkHandler {
-    public abstract JSONObject getAnswer(JSONObject command);
+    public abstract JSONObject getAnswer(JSONObject message);
 
     @Override
-    public boolean readMessage(BufferedReader in, PrintWriter out)
+    public boolean readMessage(BufferedReader in)
             throws IOException {
 
         try {
-            JSONObject command = new JSONObject(new JSONTokener(in));
-            JSONObject answer = getAnswer(command);
+            JSONObject message = new JSONObject(new JSONTokener(in));
+            JSONObject answer = getAnswer(message);
             if (answer != null)
-                out.print(answer.toString());
+                sendObject(answer);
             return true;
 
         } catch (JSONException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void sendObject(JSONObject object) {
+        agent.sendMessage(object.toString());
     }
 }

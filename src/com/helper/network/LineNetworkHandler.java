@@ -2,19 +2,18 @@ package com.helper.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public abstract class LineNetworkHandler extends NetworkHandler {
 
-    protected abstract boolean readLine(String line, PrintWriter out);
+    protected abstract boolean readLine(String line);
 
     @Override
-    public boolean readMessage(BufferedReader in, PrintWriter out)
+    public boolean readMessage(BufferedReader in)
             throws IOException {
         String line = in.readLine();
         if (line == null)
             return false;
 
-        return readLine(line, out);
+        return readLine(line);
     }
 }

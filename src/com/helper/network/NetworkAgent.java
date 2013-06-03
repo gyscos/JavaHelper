@@ -82,7 +82,7 @@ public class NetworkAgent {
             onConnect();
 
             while (running) {
-                running &= handler.readMessage(in, out);
+                running &= handler.readMessage(in);
             }
             System.out.println("Clean disconnection.");
             close();
@@ -93,6 +93,15 @@ public class NetworkAgent {
         } finally {
             onDisconnect();
         }
+    }
+
+    /**
+     * Send a message
+     * 
+     * @param content
+     */
+    public void sendMessage(String content) {
+        out.print(content);
     }
 
     public void setHandler(NetworkHandler handler) {

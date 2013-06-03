@@ -1,5 +1,7 @@
 package com.helper.network.json.rpc;
 
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,23 +15,33 @@ import com.helper.network.json.JsonHandler;
  */
 public abstract class JsonRpcHandler extends JsonHandler {
 
+    Map<Integer, JSONObject> answers;
+
     @Override
-    public JSONObject getAnswer(JSONObject command) {
+    public JSONObject getAnswer(JSONObject message) {
 
         try {
-            int id = command.optInt("id", 0);
-            String method = command.getString("method");
-            Object params = command.get("params");
+            int id = message.optInt("id", 0);
 
-            Object result = getResult(method, params);
+            if (message.has("method")) {
+                String method = message.getString("method");
+                Object params = message.get("params");
 
-            JSONObject answer = new JSONObject();
+                Object result = getResult(method, params);
 
-            answer.put("id", id);
-            answer.put("jsonrpc", "2.0");
-            answer.put("result", result);
+                JSONObject answer = new JSONObject();
 
-            return answer;
+                answer.put("id", id);
+                answer.put("jsonrpc", "2.0");
+                answer.put("result", result);
+
+                return answer;
+            } else if (message.has("result")) {
+                // Success !
+                answers.put(id, message.getJSONObject("result"));
+                notifyAll();
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -45,4 +57,34 @@ public abstract class JsonRpcHandler extends JsonHandler {
      * @return
      */
     public abstract Object getResult(String method, Object params);
+
+    public JSONObject sendCommand(String command, JSONObject params) {
+        JSONObject request = new JSONObject();
+
+        try {
+            int id = 0;
+
+            request.put("method", command);
+            request.put("params", params);
+            request.put("id", id);
+            sendObject(request);
+
+            // Now, wait for answer...
+            synchronized (this) {
+                while (true) {
+                    if (answers.containsKey(id))
+                        break;
+                    else
+                        wait();
+                }
+                return answers.remove(id);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
